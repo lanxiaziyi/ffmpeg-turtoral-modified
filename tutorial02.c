@@ -98,15 +98,17 @@ int main(int argc, char *argv[]) {
     // Allocate video frame
     pFrame=av_frame_alloc();
     AVFrame*   m_pFrameYUV = av_frame_alloc();
-    uint8_t *  out_buffer = (uint8_t *)av_malloc(avpicture_get_size(AV_PIX_FMT_YUV420P, pCodecCtx->coded_width, pCodecCtx->coded_height));
-    avpicture_fill((AVPicture *)m_pFrameYUV , out_buffer, AV_PIX_FMT_YUV420P, pCodecCtx->coded_width, pCodecCtx->coded_height);
-    struct SwsContext *img_convert_ctx = sws_getContext(pCodecCtx->coded_width, pCodecCtx->coded_height,pCodecCtx->sw_pix_fmt,
-                                                     pCodecCtx->coded_width, pCodecCtx->coded_height,AV_PIX_FMT_YUV420P,
+    //avpicture_get_size //this fun abandon,but c99 not support new fun.but my xcode supported,so i use it
+    uint8_t *  out_buffer = (uint8_t *)av_malloc(av_image_get_buffer_size(AV_PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height,1));
+    //avpicture_fill((AVPicture *)m_pFrameYUV , out_buffer, AV_PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height);
+    av_image_fill_arrays(m_pFrameYUV->data,m_pFrameYUV->linesize,out_buffer,AV_PIX_FMT_YUV420P, pCodecCtx->width, pCodecCtx->height,1);
+    struct SwsContext *img_convert_ctx = sws_getContext(pCodecCtx->width, pCodecCtx->height,pCodecCtx->sw_pix_fmt,
+                                                     pCodecCtx->width, pCodecCtx->height,AV_PIX_FMT_YUV420P,
                                                      SWS_BICUBIC,
                                                      NULL, NULL, NULL);
     
     // Make a screen to put our video
-    m_window = SDL_CreateWindow("test windows", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,pCodecCtx->coded_width, pCodecCtx->coded_height,SDL_WINDOW_SHOWN);
+    m_window = SDL_CreateWindow("test windows", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,pCodecCtx->width, pCodecCtx->height,SDL_WINDOW_SHOWN);
     if(!m_window)
     {
         printf("SDL: could not create window - exiting:%s\n",SDL_GetError());
@@ -116,7 +118,7 @@ int main(int argc, char *argv[]) {
     m_renderer = SDL_CreateRenderer(m_window, -1, 0);
     SDL_RenderClear(m_renderer);
     SDL_Texture *m_pSdlTexture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING,
-                                                   pCodecCtx->coded_width, pCodecCtx->coded_height);
+                                                   pCodecCtx->width, pCodecCtx->coded_height);
     
     rect.x = 0;
     rect.y = 0;
@@ -156,7 +158,7 @@ int main(int argc, char *argv[]) {
     }
     
     // Free the packet that was allocated by av_read_frame
-    av_free_packet(&packet);
+    av_packet_unref(&packet);
     SDL_PollEvent(&event);
     switch(event.type)
       {
