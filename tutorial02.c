@@ -98,8 +98,8 @@ int main(int argc, char *argv[]) {
     // Allocate video frame
     pFrame=av_frame_alloc();
     AVFrame*   m_pFrameYUV = av_frame_alloc();
-    uint8_t *  out_buffer = (uint8_t *)av_malloc(avpicture_get_size(PIX_FMT_YUV420P, pCodecCtx->coded_width, pCodecCtx->coded_height));
-    avpicture_fill((AVPicture *)m_pFrameYUV , out_buffer, PIX_FMT_YUV420P, pCodecCtx->coded_width, pCodecCtx->coded_height);
+    uint8_t *  out_buffer = (uint8_t *)av_malloc(avpicture_get_size(AV_PIX_FMT_YUV420P, pCodecCtx->coded_width, pCodecCtx->coded_height));
+    avpicture_fill((AVPicture *)m_pFrameYUV , out_buffer, AV_PIX_FMT_YUV420P, pCodecCtx->coded_width, pCodecCtx->coded_height);
     struct SwsContext *img_convert_ctx = sws_getContext(pCodecCtx->coded_width, pCodecCtx->coded_height,pCodecCtx->sw_pix_fmt,
                                                      pCodecCtx->coded_width, pCodecCtx->coded_height,AV_PIX_FMT_YUV420P,
                                                      SWS_BICUBIC,
