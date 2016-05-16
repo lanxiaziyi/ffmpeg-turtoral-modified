@@ -3,3 +3,4 @@
 # ffmpeg-turtoral-modified
 这是原先的：
 https://github.com/mpenkov/ffmpeg-tutorial
+http://dranger.com/ffmpeg/
