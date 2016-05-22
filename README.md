@@ -5,3 +5,5 @@
 这是原先的：
 https://github.com/mpenkov/ffmpeg-tutorial
 http://dranger.com/ffmpeg/
+
+My QQ: 2118977085
