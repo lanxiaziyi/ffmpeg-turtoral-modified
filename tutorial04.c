@@ -15,6 +15,8 @@
 //
 // to play the video stream on your screen.
 
+//this tutorial was modified by robin (ziyi.001@163.com)
+//i only changed it can run,not wonderful.but that's enough
 
 
 #include <libavcodec/avcodec.h>
