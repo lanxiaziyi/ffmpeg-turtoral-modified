@@ -396,6 +396,13 @@ int main(int argc, char *argv[]) {
   aCodecCtx=pFormatCtx->streams[audioStream]->codec;
     
     
+    int count = SDL_GetNumAudioDevices(0);
+    
+    for (int i = 0; i < count; ++i) {
+        SDL_Log("Audio device %d: %s", i, SDL_GetAudioDeviceName(i, 0));
+    }
+    
+    
   // Set audio settings from codec info
   wanted_spec.freq = aCodecCtx->sample_rate;
   wanted_spec.format = AUDIO_S16SYS;
@@ -405,11 +412,26 @@ int main(int argc, char *argv[]) {
   wanted_spec.callback = audio_callback;
   wanted_spec.userdata = aCodecCtx;
   
-  if(SDL_OpenAudio(&wanted_spec, &spec) < 0)
-  {
-    fprintf(stderr, "SDL_OpenAudio: %s\n", SDL_GetError());
-    return -1;
-  }
+//  if(SDL_OpenAudio(&wanted_spec, &spec) < 0)
+//  {
+//    fprintf(stderr, "SDL_OpenAudio: %s\n", SDL_GetError());
+//    return -1;
+//  }
+    SDL_AudioDeviceID dev;
+    dev = SDL_OpenAudioDevice(NULL, 0, &wanted_spec, &spec, SDL_AUDIO_ALLOW_FORMAT_CHANGE);
+    if(dev == 0)
+    {
+         fprintf(stderr, "Failed to open audio: %s\n", SDL_GetError());
+    }
+    else
+    {
+        if(wanted_spec.format != spec.format){
+               fprintf(stderr, "We didn't get AUDIO_S16SYS audio format.\n");
+               return -1;
+        }
+    }
+    
+    
   aCodec = avcodec_find_decoder(aCodecCtx->codec_id);
   if(!aCodec)
   {
@@ -420,8 +442,9 @@ int main(int argc, char *argv[]) {
 
   // audio_st = pFormatCtx->streams[index]
   packet_queue_init(&audioq);
-  SDL_PauseAudio(0);
-
+  //SDL_PauseAudio(0);
+    SDL_PauseAudioDevice(dev,0);
+    
   // Get a pointer to the codec context for the video stream
   pCodecCtx=pFormatCtx->streams[videoStream]->codec;
   
