@@ -118,12 +118,12 @@ int main(int argc, char *argv[]) {
     m_renderer = SDL_CreateRenderer(m_window, -1, 0);
     SDL_RenderClear(m_renderer);
     SDL_Texture *m_pSdlTexture = SDL_CreateTexture(m_renderer, SDL_PIXELFORMAT_IYUV, SDL_TEXTUREACCESS_STREAMING,
-                                                   pCodecCtx->width, pCodecCtx->coded_height);
+                                                   pCodecCtx->width, pCodecCtx->height);
     
     rect.x = 0;
     rect.y = 0;
-    rect.w = pCodecCtx->coded_width;
-    rect.h = pCodecCtx->coded_height;
+    rect.w = pCodecCtx->width;
+    rect.h = pCodecCtx->height;
    
     
   // Read frames and save first five frames to disk
@@ -139,7 +139,7 @@ int main(int argc, char *argv[]) {
       if(frameFinished)
       {
           // Convert the image into YUV format that SDL uses
-          sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->coded_height,
+          sws_scale(img_convert_ctx, (const uint8_t* const*)pFrame->data, pFrame->linesize, 0, pCodecCtx->height,
                     m_pFrameYUV->data, m_pFrameYUV->linesize);
           
     
