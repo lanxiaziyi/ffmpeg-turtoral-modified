@@ -2,7 +2,7 @@
 #所以就修改一下，顺便加点注释，重新学习下。
 # ffmpeg-turtoral-modified
 # ffmpeg sdl2
-这是原先的：
+这是原先的：  
 https://github.com/mpenkov/ffmpeg-tutorial  
 http://dranger.com/ffmpeg/  
 
