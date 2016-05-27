@@ -12,9 +12,7 @@ http://dranger.com/ffmpeg/
 *我现在用的版本是 sld是2.0.4，ffmpeg是ffmpeg-3.0.2.tar.bz2  
 
 ### xcode加载の库:lollipop: 
--------------
 <img src="xcode_load_libs.png" style="width: 780px;"/>
--------------  
 
 - ffmpeg的文档比sdl2差远了。
 - ffmpeg现在的接口变化有点大，我都有点吃力了。
